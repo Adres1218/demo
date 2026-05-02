@@ -1,91 +1,282 @@
 <!DOCTYPE html>
 <html lang="tr" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
     <title>TRAIL BIKESHOP | Elite One Final</title>
-    <link rel="icon" type="image/png" href="IMG_2856.PNG">
-    
+    <link rel="icon" type="image/png" href="https://r.resimlink.com/DXcgCFN.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@100;300;400;600;900&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@100;300;400;600;900&display=swap"
+        rel="stylesheet">
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
     <style>
-        :root { --primary: #00ff41; --bg: #0a0a0a; --card: #151515; --white: #ffffff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        html, body { width: 100%; overflow-x: hidden; background-color: var(--bg); color: var(--white); font-family: 'Outfit', sans-serif; }
-        #main-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%); }
-        .font-sync { font-family: 'Syncopate', sans-serif; }
-        .hero-title { font-size: clamp(2rem, 10vw, 8rem); font-weight: 900; line-height: 0.9; text-transform: uppercase; letter-spacing: -0.05em; }
-        .outline-text { -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1); color: transparent; }
-        .elite-card { background: var(--card); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.5rem; transition: 0.5s; overflow: hidden; }
-        .elite-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .btn-elite { padding: 1.2rem 3rem; background: var(--white); color: #000; font-weight: 900; font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase; border-radius: 0.4rem; transition: 0.5s; cursor: pointer; border: none; }
-        .btn-elite:hover { background: var(--primary); box-shadow: 0 0 50px rgba(0, 255, 65, 0.4); }
-        .reveal-up { opacity: 0; transform: translateY(40px); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        #intro-overlay { position: fixed; inset: 0; background: #000; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .intro-logo { width: 80px; height: 80px; border-radius: 20px; opacity: 0; transform: scale(0.5); }
-        .intro-brand { font-family: 'Syncopate'; font-weight: 700; font-size: clamp(0.8rem, 4vw, 1.5rem); letter-spacing: 0.8em; color: white; opacity: 0; transform: translateY(20px); margin-top: 2rem; }
+        :root {
+            --primary: #00ff41;
+            --bg: #0a0a0a;
+            --card: #151515;
+            --white: #ffffff;
+        }
 
-        .page-view { display: none; opacity: 0; transition: 0.5s; }
-        .page-view.active { display: block; opacity: 1; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        .glass { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); }
-        input { background: #111 !important; border: 1px solid #222 !important; color: white !important; }
-        .neon-btn { background: #00ff41; color: black; font-weight: 900; letter-spacing: 2px; transition: 0.3s; }
-        .neon-btn:disabled { opacity: 0.5; background: #333; color: #555; }
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: var(--bg);
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+        }
 
-        .faq-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 0; }
-        .faq-q { color: var(--primary); font-family: 'Syncopate'; font-size: 0.75rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .faq-a { color: #888; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.8; display: none; margin-top: 1rem; }
-        .faq-item.active .faq-a { display: block; }
+        #main-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .font-sync {
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+        }
+
+        .outline-text {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+            color: transparent;
+        }
+
+        .elite-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 2rem;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .elite-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 65, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .elite-card img {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .elite-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .btn-elite {
+            padding: 1.2rem 3rem;
+            background: var(--white);
+            color: #000;
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            border-radius: 0.4rem;
+            transition: 0.5s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-elite:hover {
+            background: var(--primary);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.4);
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 20000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 40px;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .intro-brand {
+            font-family: 'Syncopate';
+            font-weight: 700;
+            font-size: clamp(0.8rem, 4vw, 1.5rem);
+            letter-spacing: 0.8em;
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            margin-top: 2rem;
+        }
+
+        .page-view {
+            display: none;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+        }
+
+        input {
+            background: #111 !important;
+            border: 1px solid #222 !important;
+            color: white !important;
+        }
+
+        .neon-btn {
+            background: #00ff41;
+            color: black;
+            font-weight: 900;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .neon-btn:disabled {
+            opacity: 0.5;
+            background: #333;
+            color: #555;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem 0;
+        }
+
+        .faq-q {
+            color: var(--primary);
+            font-family: 'Syncopate';
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-a {
+            color: #888;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            line-height: 1.8;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        #custom-cursor {
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-hover {
+            width: 80px !important;
+            height: 80px !important;
+            background-color: rgba(0, 255, 65, 0.1) !important;
+            border-color: transparent !important;
+        }
     </style>
 </head>
+
 <body class="no-scrollbar">
 
     <div id="main-bg"></div>
+    <div id="custom-cursor"
+        class="fixed w-8 h-8 border border-[#00ff41] rounded-full pointer-events-none z-[9999] hidden md:block"></div>
+    <div id="cursor-dot" class="fixed w-1 h-1 bg-[#00ff41] rounded-full pointer-events-none z-[9999] hidden md:block">
+    </div>
 
     <div id="intro-overlay">
-        <img src="IMG_2856.PNG" class="intro-logo" id="intro-logo">
-        <div class="intro-brand" id="intro-brand">TRAIL BIKESHOP</div>
+        <img src="https://r.resimlink.com/DXcgCFN.png" class="intro-logo" id="intro-logo">
+        <div class="intro-brand" id="intro-brand">TRAIL BIKE SHOP</div>
     </div>
 
     <!-- Nav -->
-    <nav id="main-nav" class="fixed top-0 w-full z-[1500] p-6 md:p-10 flex justify-between items-center mix-blend-difference opacity-0">
+    <nav id="main-nav"
+        class="fixed top-0 w-full z-[1500] p-6 md:p-10 flex justify-between items-center mix-blend-difference opacity-0">
         <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
-            <img src="IMG_2856.PNG" class="w-8 h-8 rounded-lg">
-            <span class="font-sync text-sm font-bold tracking-tighter uppercase text-white">TRAIL<span class="text-[#00ff41]">_</span></span>
+            <img src="https://r.resimlink.com/uB2jmh4oK.png" class="w-8 h-8 rounded-lg">
+            <span class="font-sync text-sm font-bold tracking-tighter uppercase text-white">TRAIL BIKE SHOP</span>
         </div>
         <div class="flex gap-10">
-            <button onclick="showView('catalog')" class="text-[#00ff41] font-sync text-[10px] uppercase tracking-widest font-bold">KATALOG</button>
+            <button onclick="showView('catalog')"
+                class="text-[#00ff41] font-sync text-[10px] uppercase tracking-widest font-bold">KATALOG</button>
         </div>
     </nav>
 
     <!-- VIEWS -->
     <div id="views-container">
-        
+
         <!-- HOME VIEW -->
         <section id="view-home" class="page-view active">
             <!-- HERO -->
             <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 pt-20">
                 <div class="max-w-7xl">
-                    <span id="hero-tag" class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-12 uppercase font-sync italic opacity-0">FINAL_MASTER_v31.0</span>
+                    <span id="hero-tag"
+                        class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-12 uppercase font-sync italic opacity-0"></span>
                     <h1 class="hero-title mb-16">
                         <span class="block mb-4 reveal-text text-white opacity-0">İleri</span>
                         <span class="outline-text block reveal-text italic opacity-0">Mühendislik.</span>
                     </h1>
                     <div id="hero-cta" class="opacity-0 max-w-2xl">
-                        <p class="text-gray-400 text-[11px] md:text-[14px] font-bold uppercase tracking-[0.25em] leading-[2.5] mb-12 italic reveal-p">
-                            Trail Bikeshop, hızı sadece bir rakam olarak değil, bir mühendislik sanatı olarak görür. Konya laboratuvarımızda her bir parça, rüzgarı kesmek için milimetrik hassasiyetle tasarlanır. Trail ile her pedal, geleceğe atılmış bir adımdır. Profesyonel bisiklet dünyasında hata payı sıfırdır; biz rüzgara hükmedeceğiniz o kusursuz sürüşü inşa ediyoruz.
+                        <p
+                            class="text-gray-400 text-[11px] md:text-[14px] font-bold uppercase tracking-[0.25em] leading-[2.5] mb-12 italic reveal-p">
+                            Trail Bikeshop, hızı sadece bir rakam olarak değil, bir mühendislik sanatı olarak görür.
+                            samsun laboratuvarımızda her bir parça, rüzgarı kesmek için milimetrik hassasiyetle
+                            tasarlanır. Trail ile her pedal, geleceğe atılmış bir adımdır. Profesyonel bisiklet
+                            dünyasında hata payı sıfırdır; biz rüzgara hükmedeceğiniz o kusursuz sürüşü inşa ediyoruz.
                         </p>
                         <button onclick="showView('catalog')" class="btn-elite reveal-p">ENVANTERİ KEŞFET</button>
                     </div>
@@ -96,11 +287,13 @@
             <section id="quick-look" class="py-40 px-6 md:px-20 bg-white/[0.001]">
                 <div class="max-w-7xl mx-auto">
                     <div class="reveal-up mb-20 text-center md:text-left">
-                        <span class="text-[#00ff41] text-[10px] font-bold tracking-[1em] block mb-6 uppercase font-sync italic">ÖZEL_KOLEKSİYON</span>
-                        <h2 class="text-3xl md:text-7xl font-bold font-sync uppercase italic text-white outline-text">Yeni <span class="text-white text-2xl md:text-7xl">Modeller.</span></h2>
+
+                        <h2 class="text-3xl md:text-7xl font-bold font-sync uppercase italic text-white outline-text">
+                            Yeni <span class="text-white text-2xl md:text-7xl">Modeller.</span></h2>
                     </div>
                     <!-- 3 ÜRÜN VE DAHA KÜÇÜK KARTLAR -->
-                    <div id="home-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal-up max-w-5xl mx-auto md:mx-0">
+                    <div id="home-products"
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal-up max-w-5xl mx-auto md:mx-0">
                         <!-- Ürünler (JS ile 3 adet ve küçük gelecek) -->
                     </div>
                 </div>
@@ -109,27 +302,102 @@
             <!-- TESLİMAT & GÜVEN -->
             <section id="trust" class="py-40 px-6 md:px-20 border-y border-white/5 bg-white/[0.002]">
                 <div class="max-w-7xl mx-auto space-y-32">
-                    <div class="reveal-up">
-                        <span class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-10 uppercase font-sync italic">OPERASYONEL_GÜVENCE</span>
-                        <h2 class="text-4xl md:text-7xl font-bold font-sync uppercase leading-tight italic text-white outline-text">Güvenli <br> <span class="text-white">Teslimat.</span></h2>
+                    <div class="reveal-up text-center md:text-left">
+                        <span
+                            class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-10 uppercase font-sync italic">OPERASYONEL
+                            GÜVENCE</span>
+                        <h2
+                            class="text-5xl md:text-8xl font-bold font-sync uppercase leading-tight italic text-white outline-text">
+                            Güvenli <br> <span class="text-white">Teslimat.</span>
+                        </h2>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-20 text-gray-400 text-[11px] md:text-[14px] tracking-[0.25em] leading-[2.8] uppercase font-bold">
-                        <p class="reveal-up">Müşterilerimize olan saygımız, sunduğumuz her ürünün paketleme aşamasından başlar. Trail bünyesinde sipariş ettiğiniz her hassas parça, havacılık endüstrisinde kullanılan darbeye dayanıklı, özel yalıtımlı sandıklarda paketlenir. Bisikletinizin her bir parçası, Konya'dan kapınıza kadar olan yolculuğunda %100 sigortalıdır. Bizim için bir teslimat, sadece bir ürün göndermek değil, bir güven köprüsü kurmaktır.</p>
-                        <p class="reveal-up">Aynı gün kargo ve 24 saat içinde teslimat prensibimizle, heyecanınızı asla bekletmiyoruz. Türkiye'nin her noktasına V.I.P lojistik ağımızla ulaşıyor, ürünlerimizi "Sıfır Hata" ve "Sıfır Darbe" garantisiyle elinize teslim ediyoruz. Trail Bikeshop'tan aldığınız her parça, markamızın şeffaflık ve dürüstlük sözüdür. Size olan saygımız, kalitemizin en büyük kanıtıdır.</p>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-20 text-gray-400 text-[11px] md:text-[14px] tracking-[0.25em] leading-[2.8] uppercase font-bold">
+                        <p class="reveal-up p-8 glass rounded-3xl border-white/5">
+                            Müşterilerimize olan saygımız, sunduğumuz her ürünün paketleme aşamasından başlar. Trail
+                            bünyesinde sipariş ettiğiniz her hassas parça, havacılık endüstrisinde kullanılan darbeye
+                            dayanıklı, özel yalıtımlı sandıklarda paketlenir. Bisikletinizin her bir parçası, Samsun'dan
+                            kapınıza kadar olan yolculuğunda %100 sigortalıdır.
+                        </p>
+                        <p class="reveal-up p-8 glass rounded-3xl border-white/5">
+                            Aynı gün kargo ve 24 saat içinde teslimat prensibimizle, heyecanınızı asla bekletmiyoruz.
+                            Türkiye'nin her noktasına V.I.P lojistik ağımızla ulaşıyor, ürünlerimizi "Sıfır Hata" ve
+                            "Sıfır Darbe" garantisiyle elinize teslim ediyoruz. Trail Bikeshop'tan aldığınız her parça,
+                            markamızın şeffaflık ve dürüstlük sözüdür.
+                        </p>
                     </div>
                 </div>
             </section>
 
-            <!-- HAKKIMIZDA -->
-            <section id="about" class="py-40 px-6 md:px-20 border-b border-white/5">
-                <div class="max-w-7xl mx-auto space-y-40">
-                    <div class="reveal-up">
-                        <span class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-10 uppercase font-sync italic">MARKA_MİRASİ</span>
-                        <h2 class="text-5xl md:text-8xl font-bold font-sync uppercase leading-tight italic text-white outline-text">Sessiz <br> <span class="text-white">Devrim.</span></h2>
+            <!-- PERFORMANCE STATS (NEW) -->
+            <section class="py-40 border-b border-white/5">
+                <div class="max-w-7xl mx-auto px-6 md:px-20">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-10">
+                        <div class="reveal-up text-center">
+                            <div class="font-sync text-4xl md:text-6xl font-bold text-white mb-4">0.9<span
+                                    class="text-[#00ff41]">s</span></div>
+                            <div class="text-[9px] text-gray-500 tracking-[0.5em] uppercase font-bold">VİTES TEPKİSİ
+                            </div>
+                        </div>
+                        <div class="reveal-up text-center" style="transition-delay: 0.1s">
+                            <div class="font-sync text-4xl md:text-6xl font-bold text-white mb-4">6.8<span
+                                    class="text-[#00ff41]">kg</span></div>
+                            <div class="text-[9px] text-gray-500 tracking-[0.5em] uppercase font-bold">TOPLAM AĞIRLIK
+                            </div>
+                        </div>
+                        <div class="reveal-up text-center" style="transition-delay: 0.2s">
+                            <div class="font-sync text-4xl md:text-6xl font-bold text-white mb-4">100<span
+                                    class="text-[#00ff41]">%</span></div>
+                            <div class="text-[9px] text-gray-500 tracking-[0.5em] uppercase font-bold">KARBON LİFİ</div>
+                        </div>
+                        <div class="reveal-up text-center" style="transition-delay: 0.3s">
+                            <div class="font-sync text-4xl md:text-6xl font-bold text-white mb-4">∞</div>
+                            <div class="text-[9px] text-gray-500 tracking-[0.5em] uppercase font-bold">HIZ TUTKUSU</div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-24 text-gray-400 text-[11px] md:text-[14px] tracking-[0.25em] leading-[2.8] uppercase font-bold">
-                        <p class="reveal-up">Trail Bikeshop, hıza ve aerodinamik mükemmelliğe adanmış bir teknoloji merkezidir. Her bir vites geçişi bizim için bir mühendislik meydan okumasıdır. Konya'nın teknik mirasını dünya standartlarıyla birleştiriyoruz. Biz sadece parça değil, bir sürüş ekolü sunuyoruz. Profesyonel dünyada hata payı sıfırdır.</p>
-                        <p class="reveal-up">T1200 karbon liflerinin rijitliğini, seramik rulmanların akışkanlığını ve elektronik grup setlerin milisaniyelik tepki sürelerini en saf haliyle müşterilerimize ulaştırıyoruz. Biz, sadece parça satmıyoruz; biz rüzgara hükmedeceğiniz o "kusursuz sürüşü" tasarlıyoruz.</p>
+                </div>
+            </section>
+
+            <!-- HAKKIMIZDA (ENHANCED) -->
+            <section id="about" class="py-60 px-6 md:px-20 border-b border-white/5 relative overflow-hidden">
+                <!-- Decorative background text -->
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-sync text-[20vw] font-black text-white/[0.02] uppercase italic select-none pointer-events-none">
+                    ELITE
+                </div>
+
+                <div class="max-w-7xl mx-auto relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                        <div class="reveal-up">
+                            <span
+                                class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-10 uppercase font-sync italic">VISION
+                                REPORT</span>
+                            <h2
+                                class="text-6xl md:text-9xl font-bold font-sync uppercase leading-[0.85] italic text-white outline-text mb-10">
+                                Sessiz <br> <span class="text-white">Devrim.</span>
+                            </h2>
+                            <div class="w-32 h-1 bg-[#00ff41] mb-12"></div>
+                        </div>
+
+                        <div class="glass p-10 md:p-16 rounded-[3rem] border-white/10 reveal-up">
+                            <div
+                                class="space-y-10 text-gray-300 text-[12px] md:text-[15px] tracking-[0.2em] leading-[2.2] uppercase font-bold">
+                                <p>
+                                    Trail Bikeshop, hıza ve aerodinamik mükemmelliğe adanmış bir teknoloji merkezidir.
+                                    <span class="text-white">Samsun'un teknik mirasını</span> dünya standartlarıyla
+                                    birleştiriyoruz.
+                                    Biz sadece parça değil, bir sürüş ekolü sunuyoruz. Profesyonel dünyada hata payı
+                                    sıfırdır.
+                                </p>
+                                <p class="text-[#00ff41]/80">
+                                    T1200 karbon liflerinin rijitliğini, seramik rulmanların akışkanlığını ve elektronik
+                                    grup setlerin
+                                    milisaniyelik tepki sürelerini en saf haliyle sunuyoruz. Biz rüzgara hükmedeceğiniz
+                                    o
+                                    "kusursuz sürüşü" tasarlıyoruz.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -137,19 +405,30 @@
             <!-- SSS -->
             <section id="faq" class="py-40 px-6 md:px-20 border-b border-white/5">
                 <div class="max-w-4xl mx-auto">
-                    <span class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-12 uppercase font-sync italic text-center">BİLGİ_TERMİNALİ</span>
+                    <span
+                        class="text-[#00ff41] text-[10px] font-bold tracking-[1.5em] block mb-12 uppercase font-sync italic text-center">BİLGİ
+                        TERMİNALİ</span>
                     <div class="space-y-4">
                         <div class="faq-item reveal-up">
-                            <div class="faq-q" onclick="toggleFaq(this)">KARGO SÜRECİ VE GÜVENLİK NASILDIR? <span>+</span></div>
-                            <div class="faq-a">Siparişleriniz aynı gün içinde özel darbeye dayanıklı sandıklara yerleştirilir ve Konya merkezimizden sigortalı olarak 24 saat içinde kapınıza ulaştırılır.</div>
+                            <div class="faq-q" onclick="toggleFaq(this)">KARGO SÜRECİ VE GÜVENLİK NASILDIR?
+                                <span>+</span>
+                            </div>
+                            <div class="faq-a">Siparişleriniz aynı gün içinde özel darbeye dayanıklı sandıklara
+                                yerleştirilir ve Samsun merkezimizden sigortalı olarak 24 saat içinde kapınıza
+                                ulaştırılır.</div>
                         </div>
                         <div class="faq-item reveal-up">
-                            <div class="faq-q" onclick="toggleFaq(this)">ÜRÜNLERİN ORİJİNALLİK GARANTİSİ VAR MI? <span>+</span></div>
-                            <div class="faq-a">Tüm parçalarımız yetkili distribütör garantili ve %100 orijinaldir. Her parça seri numarası ile kontrol edilerek Trail veritabanına kayıt edilir.</div>
+                            <div class="faq-q" onclick="toggleFaq(this)">ÜRÜNLERİN ORİJİNALLİK GARANTİSİ VAR MI?
+                                <span>+</span>
+                            </div>
+                            <div class="faq-a">Tüm parçalarımız yetkili distribütör garantili ve %100 orijinaldir. Her
+                                parça seri numarası ile kontrol edilerek Trail veritabanına kayıt edilir.</div>
                         </div>
                         <div class="faq-item reveal-up">
-                            <div class="faq-q" onclick="toggleFaq(this)">TEKNİK DESTEK VE MONTAJ YARDIMI VERİYOR MUSUNUZ? <span>+</span></div>
-                            <div class="faq-a">WhatsApp hattımız üzerinden uzman teknisyenlerimizle her türlü montaj ve uyumluluk konusunda 7/24 profesyonel destek alabilirsiniz.</div>
+                            <div class="faq-q" onclick="toggleFaq(this)">TEKNİK DESTEK VE MONTAJ YARDIMI VERİYOR
+                                MUSUNUZ? <span>+</span></div>
+                            <div class="faq-a">WhatsApp hattımız üzerinden uzman teknisyenlerimizle her türlü montaj ve
+                                uyumluluk konusunda 7/24 profesyonel destek alabilirsiniz.</div>
                         </div>
                     </div>
                 </div>
@@ -159,8 +438,12 @@
         <!-- CATALOG VIEW -->
         <section id="view-catalog" class="page-view py-40 px-6 md:px-20">
             <div class="max-w-7xl mx-auto">
-                <button onclick="showView('home')" class="mb-20 text-gray-500 hover:text-[#00ff41] font-sync text-[10px] uppercase tracking-[0.5em] flex items-center gap-4 transition-all">← ANA SAYFAYA DÖN</button>
-                <h2 class="text-4xl md:text-8xl font-bold font-sync uppercase mb-20 italic text-white outline-text">Tüm <br> <span class="text-white">Ekipmanlar.</span></h2>
+                <button onclick="showView('home')"
+                    class="mb-20 text-gray-500 hover:text-[#00ff41] font-sync text-[10px] uppercase tracking-[0.5em] flex items-center gap-4 transition-all">←
+                    ANA SAYFAYA DÖN</button>
+                <h2 class="text-4xl md:text-8xl font-bold font-sync uppercase mb-20 italic text-white outline-text">Tüm
+                    <br> <span class="text-white">Ekipmanlar.</span>
+                </h2>
                 <div id="catalog-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
             </div>
         </section>
@@ -170,17 +453,22 @@
             <div id="admin-login-screen" class="max-w-sm mx-auto p-12 glass rounded-[2.5rem] text-center">
                 <h2 class="font-sync text-[10px] mb-12 tracking-widest uppercase text-white">ADMİN TERMİNALİ</h2>
                 <div class="space-y-6">
-                    <input type="email" id="admin-email" placeholder="Gmail" class="w-full p-5 rounded-xl outline-none text-sm">
-                    <input type="password" id="admin-pass" placeholder="Şifre" class="w-full p-5 rounded-xl outline-none text-sm">
-                    <button onclick="adminLogin()" id="btn-admin-login" class="w-full p-5 rounded-xl neon-btn uppercase text-xs font-black">SİSTEME BAĞLAN</button>
+                    <input type="email" id="admin-email" placeholder="Gmail"
+                        class="w-full p-5 rounded-xl outline-none text-sm">
+                    <input type="password" id="admin-pass" placeholder="Şifre"
+                        class="w-full p-5 rounded-xl outline-none text-sm">
+                    <button onclick="adminLogin()" id="btn-admin-login"
+                        class="w-full p-5 rounded-xl neon-btn uppercase text-xs font-black">SİSTEME BAĞLAN</button>
                 </div>
                 <p id="login-status" class="mt-8 text-[9px] text-[#00ff41] uppercase tracking-widest h-4 font-bold"></p>
             </div>
 
             <div id="admin-panel" class="hidden max-w-2xl mx-auto space-y-10">
                 <header class="flex justify-between items-center mb-10">
-                    <span class="font-sync text-[10px] text-[#00ff41] tracking-widest italic">TERMINAL_ONLINE</span>
-                    <button onclick="adminLogout()" class="text-red-500 text-[10px] font-bold uppercase tracking-widest border border-red-500/20 px-6 py-2 rounded">GÜVENLİ ÇIKIŞ</button>
+                    <span class="font-sync text-[10px] text-[#00ff41] tracking-widest italic">TERMINAL ONLINE</span>
+                    <button onclick="adminLogout()"
+                        class="text-red-500 text-[10px] font-bold uppercase tracking-widest border border-red-500/20 px-6 py-2 rounded">GÜVENLİ
+                        ÇIKIŞ</button>
                 </header>
                 <section class="glass p-10 rounded-[2.5rem] space-y-6">
                     <h3 id="form-title" class="text-[10px] font-sync text-gray-500 uppercase">Envanter Yönetimi</h3>
@@ -188,8 +476,10 @@
                     <input type="number" id="p-price" placeholder="Fiyat" class="w-full p-4 rounded-xl outline-none">
                     <input type="text" id="p-url" placeholder="Resim URL" class="w-full p-4 rounded-xl outline-none">
                     <div class="flex gap-4">
-                        <button onclick="saveProduct()" id="btn-save" class="flex-1 p-5 rounded-xl neon-btn uppercase text-xs font-black">KAYDET</button>
-                        <button onclick="cancelEdit()" id="btn-cancel" class="hidden p-5 rounded-xl bg-gray-800 text-white uppercase text-[9px]">İptal</button>
+                        <button onclick="saveProduct()" id="btn-save"
+                            class="flex-1 p-5 rounded-xl neon-btn uppercase text-xs font-black">KAYDET</button>
+                        <button onclick="cancelEdit()" id="btn-cancel"
+                            class="hidden p-5 rounded-xl bg-gray-800 text-white uppercase text-[9px]">İptal</button>
                     </div>
                 </section>
                 <div id="admin-list" class="space-y-3"></div>
@@ -199,15 +489,20 @@
     </div>
 
     <footer class="py-40 px-10 bg-[#050505] text-center border-t border-white/5 overflow-hidden">
-        <h2 class="font-sync font-bold uppercase italic mb-16 tracking-tighter text-white opacity-5 whitespace-nowrap text-[2rem] md:text-[8rem]">TRAIL_ENGINEERING</h2>
+        <h2
+            class="font-sync font-bold uppercase italic mb-16 tracking-tighter text-white opacity-5 whitespace-nowrap text-[2rem] md:text-[8rem]">
+            TRAIL ENGINEERING</h2>
         <div class="flex flex-col md:flex-row justify-between items-center gap-10">
             <div class="flex items-center gap-4">
-                <img src="IMG_2856.PNG" class="w-8 h-8 rounded-lg shadow-2xl">
+                <img src="https://r.resimlink.com/uB2jmh4oK.png" class="w-8 h-8 rounded-lg shadow-2xl">
                 <span class="text-[10px] text-gray-700 tracking-[1em] font-sync uppercase">© 2026 TRAIL BIKESHOP</span>
             </div>
             <div class="flex gap-12">
-                <a href="https://wa.me/905052581881" target="_blank" class="text-gray-600 hover:text-[#00ff41] text-[9px] font-bold uppercase italic">WHATSAPP</a>
-                <button onclick="showView('admin')" class="text-gray-800 hover:text-white text-[9px] font-bold tracking-widest transition-all">// TERMİNAL</button>
+                <a href="https://wa.me/905052581881" target="_blank"
+                    class="text-gray-600 hover:text-[#00ff41] text-[9px] font-bold uppercase italic">WHATSAPP</a>
+                <button onclick="showView('admin')"
+                    class="text-gray-800 hover:text-white text-[9px] font-bold tracking-widest transition-all">//
+                    TERMİNAL</button>
             </div>
         </div>
     </footer>
@@ -252,15 +547,15 @@
             const p = document.getElementById('admin-pass').value;
             const btn = document.getElementById('btn-admin-login');
             const status = document.getElementById('login-status');
-            if(!e || !p) return alert("Eksik!");
+            if (!e || !p) return alert("Eksik!");
             btn.disabled = true;
             btn.innerText = "BAĞLANILIYOR...";
             status.innerText = "SİSTEM BAĞLANTISI KURULUYOR...";
-            try { 
-                await auth.signInWithEmailAndPassword(e, p); 
+            try {
+                await auth.signInWithEmailAndPassword(e, p);
                 status.innerText = "ERİŞİM ONAYLANDI";
-            } catch(err) { 
-                alert("Hata: " + err.message); 
+            } catch (err) {
+                alert("Hata: " + err.message);
                 btn.disabled = false;
                 btn.innerText = "SİSTEME BAĞLAN";
                 status.innerText = "BAĞLANTI BAŞARISIZ";
@@ -287,7 +582,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 catalog.innerHTML += `
                     <div class="elite-card p-6 flex flex-col gap-8 group">
                         <img src="${p.imageUrl}" class="w-full h-64 object-cover rounded-2xl transition-all duration-700">
@@ -298,7 +593,7 @@
                         <a href="https://wa.me/905052581881?text=Merhaba, ${p.name} hakkında bilgi alabilir miyim?" target="_blank" class="text-center p-4 border border-white/10 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-[#00ff41] hover:text-black transition-all">SİPARİŞ VER</a>
                     </div>
                 `;
-                if(count < 3) { list.innerHTML += smallCard; count++; }
+                if (count < 3) { list.innerHTML += smallCard; count++; }
             });
         });
 
@@ -306,13 +601,13 @@
             const n = document.getElementById('p-name').value;
             const pr = document.getElementById('p-price').value;
             const url = document.getElementById('p-url').value;
-            if(!n || !pr || !url) return alert("Eksik!");
+            if (!n || !pr || !url) return alert("Eksik!");
             const data = { name: n, price: Number(pr), imageUrl: url };
             try {
-                if(editId) { await db.collection("products").doc(editId).update(data); alert("Güncellendi"); }
+                if (editId) { await db.collection("products").doc(editId).update(data); alert("Güncellendi"); }
                 else { data.createdAt = firebase.firestore.FieldValue.serverTimestamp(); await db.collection("products").add(data); alert("Eklendi"); }
                 cancelEdit();
-            } catch(err) { alert(err.message); }
+            } catch (err) { alert(err.message); }
         }
 
         function loadAdminList() {
@@ -345,7 +640,7 @@
             document.getElementById('form-title').innerText = "DÜZENLE";
             document.getElementById('btn-save').innerText = "GÜNCELLE";
             document.getElementById('btn-cancel').classList.remove('hidden');
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
 
         function cancelEdit() {
@@ -358,22 +653,37 @@
             document.getElementById('btn-cancel').classList.add('hidden');
         }
 
-        async function deleteProduct(id) { if(confirm("Sil?")) await db.collection("products").doc(id).delete(); }
+        async function deleteProduct(id) { if (confirm("Sil?")) await db.collection("products").doc(id).delete(); }
 
         function toggleFaq(el) { el.parentElement.classList.toggle('active'); }
 
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        const dot = document.getElementById('cursor-dot');
+
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.5, ease: "power2.out" });
+            gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 });
+        });
+
+        document.querySelectorAll('button, a, .elite-card, .faq-q').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
         const introTl = gsap.timeline();
         introTl.to("#intro-logo", { opacity: 1, scale: 1, duration: 1.5, ease: "expo.out", delay: 0.5 })
-               .to("#intro-brand", { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5")
-               .to("#intro-overlay", { yPercent: -100, duration: 1, ease: "expo.inOut", delay: 1 })
-               .to("#main-nav", { opacity: 1, duration: 1 }, "-=0.5")
-               .to(".reveal-text", { opacity: 1, y: 0, stagger: 0.2, duration: 1, ease: "expo.out" }, "-=0.8")
-               .to("#hero-cta", { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=1")
-               .to("#hero-tag", { opacity: 1, duration: 1 }, "-=1");
+            .to("#intro-brand", { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5")
+            .to("#intro-overlay", { yPercent: -100, duration: 1, ease: "expo.inOut", delay: 1 })
+            .to("#main-nav", { opacity: 1, duration: 1 }, "-=0.5")
+            .to(".reveal-text", { opacity: 1, y: 0, stagger: 0.2, duration: 1, ease: "expo.out" }, "-=0.8")
+            .to("#hero-cta", { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=1")
+            .to("#hero-tag", { opacity: 1, duration: 1 }, "-=1");
 
         gsap.utils.toArray(".reveal-up").forEach(el => {
             gsap.to(el, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 95%" } });
         });
     </script>
 </body>
+
 </html>
